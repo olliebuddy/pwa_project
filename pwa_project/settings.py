@@ -30,15 +30,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
-INSTALLED_APPS = [
-    'tasks',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,3 +114,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+INSTALLED_APPS = [
+    'users',
+    'tasks',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
