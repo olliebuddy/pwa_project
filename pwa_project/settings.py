@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dhs-g$x!bh101d)(iz+-0k7qr9-c48ia5m6pm-k+0rhk=(a197'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True 
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
@@ -38,6 +38,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 INSTALLED_APPS = [
+    'corsheaders',
     'users',
     'tasks',
     'django.contrib.sites',
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'allauth.account.middleware.AccountMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -79,6 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'users.context_processors.username'
             ],
         },
     },
@@ -167,3 +170,11 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SESSION_COOKIE_AGE = 1209600  # Two weeks
 SESSION_SAVE_EVERY_REQUEST = True  # Save session with each request
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React development server
+]
+
+STATICFILES_DIRS = [
+    BASE_DIR / "tasks" / "static" / "tasks" / "build" / "static",
+    ]
