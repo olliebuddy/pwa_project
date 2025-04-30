@@ -5,24 +5,18 @@ from django.urls import reverse
 from .models import Task
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .forms import NewTaskForm
+from .models import Category
 
 # Form class for adding a new task
-class NewTaskForm(forms.Form):
-    task = forms.CharField(
-        label='',  
-        widget=forms.TextInput(attrs={
-            'autofocus': 'autofocus', 
-            'id': 'task', 
-            'placeholder': 'New Task'  
-        })
-    )
-
 # Index View - Home page showing task list
 def index(request):
     # Fetch all tasks from the database to display them
+    categories = Category.objects.filter(parent=None).prefetch_related('subcategories', 'tasks')
     tasks = Task.objects.all()
     return render(request, "tasks/index.html", {
-        "tasks": tasks  # Pass tasks to the template
+        "tasks": tasks,  # Pass tasks to the template
+        "categories": categories
     })
 
 # Add View - Adding a new task via form
@@ -87,3 +81,16 @@ def delete_task(request, id):
         task.delete()  # Delete the task from the database
         return JsonResponse({"message": "Task deleted successfully."})
     return HttpResponseNotAllowed(["DELETE"])
+
+def add(request):
+    if request.method == "POST":
+        form = NewTaskForm(request.POST)
+        if form.is_valid():
+            task_name = form.cleaned_data["task"]
+            category = form.cleaned_data.get("category")  # Get the optional category
+            Task.objects.create(name=task_name, category=category)  # Save the Task with category if provided
+            return HttpResponseRedirect(reverse("tasks:index"))
+        else:
+            return render(request, "tasks/add.html", {"form": form})
+    
+    return render(request, "tasks/add.html", {"form": NewTaskForm()})
